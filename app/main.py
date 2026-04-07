@@ -34,8 +34,8 @@ unless the question requires more depth. Always be helpful to non-experts."""
 
 
 AVAILABLE_MODELS = {
-    "gpt-5.4-mini": "GPT-4.1 Mini",
-    "gpt-5.4-nano": "GPT-4.1 Nano",
+    "gpt-5.4-mini": "GPT-5.4 Mini",
+    "gpt-5.4-nano": "GPT-5.4 Nano",
 }
 
 
