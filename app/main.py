@@ -34,8 +34,8 @@ unless the question requires more depth. Always be helpful to non-experts."""
 
 
 AVAILABLE_MODELS = {
-    "gpt-4.1-mini": "GPT-4.1 Mini",
-    "gpt-4.1-nano": "GPT-4.1 Nano (fastest)",
+    "gpt-5.4-mini": "GPT-4.1 Mini",
+    "gpt-5.4-nano": "GPT-4.1 Nano",
 }
 
 
@@ -84,7 +84,7 @@ def get_models():
 
 class QueryRequest(BaseModel):
     question: str
-    model: str = "gpt-4.1-mini"
+    model: str = "gpt-5.4-mini"
     history: list[dict] = []   # [{role: "user"|"assistant", content: "..."}]
 
 
