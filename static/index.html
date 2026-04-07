@@ -17,12 +17,15 @@
       <span class="logo-text">US Financial Aid Guide</span>
       <span class="logo-sub">Powered by the FSA Handbook</span>
     </div>
-    <div class="model-selector">
-      <label for="model-select">Model</label>
-      <select id="model-select">
-        <option value="gpt-5.4-mini">GPT-5.4 Mini</option>
-        <option value="gpt-5.4-nano">GPT-5.4 Nano</option>
-      </select>
+    <div class="header-right">
+      <button class="how-it-works-btn" id="open-hiw">How it works</button>
+      <div class="model-selector">
+        <label for="model-select">Model</label>
+        <select id="model-select">
+          <option value="gpt-5.4-mini">GPT-5.4 Mini</option>
+          <option value="gpt-5.4-nano">GPT-5.4 Nano</option>
+        </select>
+      </div>
     </div>
   </div>
   <!-- Mobile tab bar -->
@@ -88,6 +91,137 @@
     <div class="graph-legend" id="graph-legend"></div>
   </section>
 </main>
+
+<!-- How it works modal -->
+<div class="hiw-backdrop" id="hiw-backdrop" role="dialog" aria-modal="true" aria-label="How it works">
+  <div class="hiw-modal">
+    <div class="hiw-header">
+      <div>
+        <h2 class="hiw-title">How US Financial Aid Guide Works</h2>
+        <p class="hiw-subtitle">A grounded AI approach to complex regulatory knowledge</p>
+      </div>
+      <button class="hiw-close" id="close-hiw" aria-label="Close">&times;</button>
+    </div>
+
+    <div class="hiw-body">
+
+      <!-- The problem -->
+      <div class="hiw-section hiw-problem">
+        <h3>The problem with asking ChatGPT about financial aid</h3>
+        <p>General-purpose AI models are trained on internet text — which includes outdated, incorrect, and oversimplified information about student aid. They hallucinate dollar amounts, cite repealed regulations, and can't distinguish between the 2023 and 2025 rules. For something as consequential as financial aid, that's not good enough.</p>
+      </div>
+
+      <!-- Architecture flow -->
+      <div class="hiw-section">
+        <h3>The architecture</h3>
+        <p class="hiw-section-sub">Three layers work together on every question you ask.</p>
+
+        <div class="hiw-flow">
+          <div class="hiw-step">
+            <div class="hiw-step-icon">📄</div>
+            <div class="hiw-step-content">
+              <strong>Source: FSA Handbook</strong>
+              <span>The official US Department of Education Federal Student Aid Handbook — 10 volumes, ~490,000 words. The authoritative source for every financial aid rule, eligibility requirement, and dollar limit.</span>
+            </div>
+          </div>
+
+          <div class="hiw-arrow">↓</div>
+
+          <div class="hiw-step hiw-step-split">
+            <div class="hiw-step hiw-step-half">
+              <div class="hiw-step-icon">🕸️</div>
+              <div class="hiw-step-content">
+                <strong>Knowledge Graph</strong>
+                <span>224 concepts (nodes) and 200 relationships (edges) extracted from the handbook using AI. Clusters related topics — FAFSA, SAI, Pell Grants, R2T4, Direct Loans — and maps how they connect. Visible in the graph panel.</span>
+              </div>
+            </div>
+            <div class="hiw-plus">+</div>
+            <div class="hiw-step hiw-step-half">
+              <div class="hiw-step-icon">🔍</div>
+              <div class="hiw-step-content">
+                <strong>BM25 Text Search</strong>
+                <span>1,965 chunks of the actual handbook text, indexed for precision keyword retrieval. When you ask a question, the top relevant passages — with exact dollar limits, specific eligibility rules — are pulled directly from the source.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hiw-arrow">↓</div>
+
+          <div class="hiw-step">
+            <div class="hiw-step-icon">🤖</div>
+            <div class="hiw-step-content">
+              <strong>GPT-5.4 Synthesis</strong>
+              <span>The retrieved graph context and handbook passages are handed to OpenAI's GPT-5.4. The model reads the actual source material and synthesizes a clear, conversational answer — grounded in the handbook, not its training data.</span>
+            </div>
+          </div>
+
+          <div class="hiw-arrow">↓</div>
+
+          <div class="hiw-step hiw-step-result">
+            <div class="hiw-step-icon">💬</div>
+            <div class="hiw-step-content">
+              <strong>Your answer</strong>
+              <span>Accurate, specific, and cited. The graph panel highlights which concepts were used to answer your question.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Why graph -->
+      <div class="hiw-section">
+        <h3>Why a knowledge graph?</h3>
+        <div class="hiw-cards">
+          <div class="hiw-card">
+            <div class="hiw-card-icon">🗺️</div>
+            <strong>Structure over chaos</strong>
+            <p>Financial aid rules form a web — FAFSA feeds the SAI, the SAI determines Pell eligibility, Pell affects loan packaging. The graph makes those dependencies explicit and traversable.</p>
+          </div>
+          <div class="hiw-card">
+            <div class="hiw-card-icon">🎯</div>
+            <strong>Precision retrieval</strong>
+            <p>Instead of searching 490,000 words blindly, the graph routes the query to the right neighborhood of concepts first. BM25 then finds the exact passages within that scope.</p>
+          </div>
+          <div class="hiw-card">
+            <div class="hiw-card-icon">🔗</div>
+            <strong>Cross-volume reasoning</strong>
+            <p>A question about loan limits touches Vol 3 (packaging), Vol 8 (Direct Loans), and the Verification Guide. The graph knows those connections; plain text search doesn't.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Business lens -->
+      <div class="hiw-section">
+        <h3>The business lens</h3>
+        <p>This pattern — <strong>domain document → knowledge graph + text index → grounded LLM</strong> — applies to any regulated, high-stakes domain where hallucination is unacceptable:</p>
+        <div class="hiw-domains">
+          <span class="hiw-domain-tag">Healthcare coverage rules</span>
+          <span class="hiw-domain-tag">Tax code & IRS guidance</span>
+          <span class="hiw-domain-tag">Legal contracts</span>
+          <span class="hiw-domain-tag">Insurance policy analysis</span>
+          <span class="hiw-domain-tag">HR & benefits compliance</span>
+          <span class="hiw-domain-tag">Building codes</span>
+          <span class="hiw-domain-tag">Government procurement</span>
+          <span class="hiw-domain-tag">Clinical trial protocols</span>
+        </div>
+        <p class="hiw-biz-note">The knowledge graph adds a layer that pure RAG misses: it captures <em>how concepts relate</em>, not just <em>where text appears</em>. That's the difference between a search engine and an advisor.</p>
+      </div>
+
+      <!-- Stack -->
+      <div class="hiw-section hiw-stack-section">
+        <h3>Tech stack</h3>
+        <div class="hiw-stack">
+          <div class="hiw-stack-item"><span class="hiw-pill">graphify</span>Knowledge graph extraction from PDFs</div>
+          <div class="hiw-stack-item"><span class="hiw-pill">BM25Okapi</span>Fast, accurate text retrieval (rank-bm25)</div>
+          <div class="hiw-stack-item"><span class="hiw-pill">OpenAI GPT-5.4</span>Answer synthesis from retrieved context</div>
+          <div class="hiw-stack-item"><span class="hiw-pill">FastAPI</span>Python API serving graph + chat</div>
+          <div class="hiw-stack-item"><span class="hiw-pill">vis-network</span>Interactive graph visualization</div>
+          <div class="hiw-stack-item"><span class="hiw-pill">Railway</span>Single-container cloud deployment</div>
+        </div>
+      </div>
+
+    </div><!-- /hiw-body -->
+  </div><!-- /hiw-modal -->
+</div><!-- /hiw-backdrop -->
 
 <script src="/static/graph-viz.js"></script>
 <script src="/static/app.js"></script>

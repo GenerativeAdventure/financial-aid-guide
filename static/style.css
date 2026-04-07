@@ -80,6 +80,31 @@ header {
 
 @media (min-width: 700px) { .logo-sub { display: inline; } }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.how-it-works-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 13px;
+  padding: 5px 13px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: var(--font);
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.how-it-works-btn:hover {
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
 .model-selector {
   display: flex;
   align-items: center;
@@ -520,4 +545,303 @@ main {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
+}
+
+/* ============================================================
+   How It Works Modal
+   ============================================================ */
+
+.hiw-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+
+.hiw-backdrop.open {
+  display: flex;
+}
+
+.hiw-modal {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  width: 100%;
+  max-width: 760px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+  overflow: hidden;
+}
+
+.hiw-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 24px 28px 20px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.hiw-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin-bottom: 4px;
+}
+
+.hiw-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.hiw-close {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-left: 16px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.hiw-close:hover { background: var(--border); color: var(--text-primary); }
+
+.hiw-body {
+  overflow-y: auto;
+  padding: 24px 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ---- Problem section ---- */
+.hiw-problem {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+}
+
+.hiw-problem h3 { margin-bottom: 8px; }
+
+.hiw-section h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.hiw-section p {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.hiw-section-sub {
+  margin-bottom: 16px !important;
+}
+
+/* ---- Architecture flow ---- */
+.hiw-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hiw-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+
+.hiw-step-split {
+  background: none;
+  border: none;
+  padding: 0;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.hiw-step-half {
+  flex: 1;
+  min-width: 200px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+
+.hiw-plus {
+  display: flex;
+  align-items: center;
+  font-size: 22px;
+  color: var(--text-muted);
+  font-weight: 300;
+  padding: 0 2px;
+  align-self: center;
+}
+
+.hiw-step-result {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.hiw-step-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  width: 34px;
+  text-align: center;
+  margin-top: 1px;
+}
+
+.hiw-step-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hiw-step-content strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.hiw-step-content span {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.hiw-arrow {
+  text-align: center;
+  font-size: 18px;
+  color: var(--text-muted);
+  line-height: 1;
+  padding: 2px 0;
+}
+
+/* ---- Why graph cards ---- */
+.hiw-cards {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.hiw-card {
+  flex: 1;
+  min-width: 180px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hiw-card-icon { font-size: 20px; margin-bottom: 2px; }
+
+.hiw-card strong {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.hiw-card p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ---- Business lens ---- */
+.hiw-domains {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0;
+}
+
+.hiw-domain-tag {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+
+.hiw-biz-note {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  border-left: 3px solid var(--accent);
+  padding-left: 14px;
+  margin-top: 4px !important;
+}
+
+.hiw-biz-note em {
+  color: var(--text-primary);
+  font-style: normal;
+}
+
+/* ---- Tech stack ---- */
+.hiw-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hiw-stack-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.hiw-pill {
+  background: var(--accent-dim);
+  border: 1px solid rgba(79, 126, 248, 0.3);
+  color: var(--accent-hover);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+  min-width: 140px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* ---- Mobile modal ---- */
+@media (max-width: 768px) {
+  .hiw-backdrop { padding: 0; align-items: flex-end; }
+  .hiw-modal { max-height: 92vh; border-radius: 14px 14px 0 0; }
+  .hiw-header { padding: 20px 20px 16px; }
+  .hiw-body { padding: 20px 20px 28px; gap: 24px; }
+  .hiw-step-split { flex-direction: column; }
+  .hiw-plus { display: none; }
+  .hiw-title { font-size: 17px; }
+  .hiw-cards { flex-direction: column; }
+  .how-it-works-btn { font-size: 12px; padding: 4px 10px; }
 }

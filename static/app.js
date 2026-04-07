@@ -69,6 +69,13 @@ async function loadModels() {
 }
 
 function bindEvents() {
+  // How it works modal
+  const backdrop = document.getElementById("hiw-backdrop");
+  document.getElementById("open-hiw").addEventListener("click", () => backdrop.classList.add("open"));
+  document.getElementById("close-hiw").addEventListener("click", () => backdrop.classList.remove("open"));
+  backdrop.addEventListener("click", (e) => { if (e.target === backdrop) backdrop.classList.remove("open"); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") backdrop.classList.remove("open"); });
+
   sendBtn.addEventListener("click", handleSend);
 
   questionInput.addEventListener("keydown", (e) => {
