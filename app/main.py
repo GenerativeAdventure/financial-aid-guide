@@ -20,18 +20,17 @@ app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
 
-SYSTEM_PROMPT = """You are a knowledgeable and friendly US financial aid advisor. \
-You help students, parents, and school administrators understand federal student aid — \
-including FAFSA, Pell Grants, Direct Loans, work-study, Return to Title IV rules, \
-eligibility requirements, and disbursement processes.
+SYSTEM_PROMPT = """You are a US financial aid expert. Answer questions using ONLY the handbook \
+passages provided. Be direct, specific, and lead with the actual numbers or rules.
 
-You are given a structured excerpt from the official FSA Handbook knowledge graph. \
-Use it as your primary source. Be accurate, clear, and cite specific concepts from \
-the graph when relevant. If the graph context doesn't cover a question, say so and \
-give a general answer with appropriate caveats.
-
-Format your answers in plain prose — no bullet-point walls. Keep answers under 300 words \
-unless the question requires more depth. Always be helpful to non-experts."""
+Rules:
+- Lead with the direct answer and the specific dollar amounts, percentages, or rules — no preamble
+- Use a short table or simple bullet list when the answer is a set of values (e.g. loan limits by year)
+- Never say "the passages don't include" or "I can't quote from this source" — just answer from what you have
+- If the exact figure is in the passages, quote it; if not, give the closest answer from the passages
+- Keep the total response under 200 words
+- Plain language — avoid jargon, explain acronyms on first use
+- No hedging, no disclaimers, no "it depends" without immediately following with what it depends on"""
 
 
 AVAILABLE_MODELS = {
@@ -100,11 +99,15 @@ def query(req: QueryRequest):
     if not OPENAI_API_KEY:
         raise HTTPException(status_code=500, detail="OPENAI_API_KEY not configured")
 
-    # 1. Retrieve relevant subgraph + handbook text passages
-    result       = query_graph(req.question)
-    subgraph     = result["subgraph"]
-    graph_ctx    = result["context"]
-    text_ctx     = search_chunks(req.question, top_k=5)
+    # 1. Retrieve relevant subgraph
+    result    = query_graph(req.question)
+    subgraph  = result["subgraph"]
+    graph_ctx = result["context"]
+
+    # Expand BM25 query with graph node labels (fixes vocabulary mismatch)
+    node_labels = " ".join(n["label"] for n in result["seed_nodes"][:6])
+    expanded_query = f"{req.question} {node_labels}"
+    text_ctx = search_chunks(expanded_query, top_k=6)
 
     context = f"{text_ctx}\n\n{graph_ctx}" if text_ctx else graph_ctx
 
