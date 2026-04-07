@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.env
+.graphify_*
+handbook/
+graphify-out/cache/
+*.DS_Store

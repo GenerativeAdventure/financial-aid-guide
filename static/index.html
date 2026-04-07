@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>US Financial Aid Guide</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <!-- vis-network from CDN -->
+  <script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon">🎓</span>
+      <span class="logo-text">US Financial Aid Guide</span>
+      <span class="logo-sub">Powered by the FSA Handbook</span>
+    </div>
+    <div class="model-selector">
+      <label for="model-select">Model</label>
+      <select id="model-select">
+        <option value="gpt-4.1-mini">GPT-4.1 Mini</option>
+        <option value="gpt-4.1">GPT-4.1</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- Left: Chat panel -->
+  <section class="chat-panel">
+    <div class="chat-messages" id="chat-messages">
+      <div class="welcome-message">
+        <h2>Ask anything about US financial aid</h2>
+        <p>Questions about FAFSA, Pell Grants, student loans, eligibility, disbursement, and more — all grounded in the official FSA Handbook.</p>
+        <div class="example-questions">
+          <button class="example-btn" data-q="How is the Student Aid Index calculated?">How is the SAI calculated?</button>
+          <button class="example-btn" data-q="What are the eligibility requirements for a Pell Grant?">Pell Grant eligibility</button>
+          <button class="example-btn" data-q="How does Return to Title IV work when a student withdraws?">R2T4 withdrawal rules</button>
+          <button class="example-btn" data-q="What are the Direct Loan borrowing limits?">Direct Loan limits</button>
+        </div>
+      </div>
+    </div>
+    <div class="chat-input-area">
+      <div class="input-row">
+        <textarea
+          id="question-input"
+          placeholder="Ask a question about financial aid..."
+          rows="2"
+          maxlength="500"
+        ></textarea>
+        <button id="send-btn" class="send-btn" aria-label="Send">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+      <div class="input-meta">
+        <span id="char-count">0 / 500</span>
+        <span class="disclaimer">Based on the 2024–2025 FSA Handbook. Not legal or financial advice.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Right: Graph panel -->
+  <section class="graph-panel">
+    <div class="graph-toolbar">
+      <span class="graph-title">Knowledge Graph</span>
+      <div class="graph-controls">
+        <button id="btn-full-graph" class="graph-btn active">Full</button>
+        <button id="btn-fit" class="graph-btn">Fit</button>
+      </div>
+    </div>
+    <div id="graph-container"></div>
+    <div class="graph-legend" id="graph-legend"></div>
+  </section>
+</main>
+
+<script src="/static/graph-viz.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>
