@@ -23,7 +23,34 @@ document.addEventListener("DOMContentLoaded", () => {
   GraphViz.loadFull();
   loadModels();
   bindEvents();
+  bindMobileTabs();
 });
+
+// ---- Mobile tab switching ----
+function bindMobileTabs() {
+  const tabs = document.querySelectorAll(".mobile-tab");
+  const panelChat  = document.getElementById("panel-chat");
+  const panelGraph = document.getElementById("panel-graph");
+
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      tabs.forEach(t => { t.classList.remove("active"); t.setAttribute("aria-selected", "false"); });
+      tab.classList.add("active");
+      tab.setAttribute("aria-selected", "true");
+
+      const target = tab.dataset.panel;
+      if (target === "chat") {
+        panelChat.classList.remove("panel-hidden");
+        panelGraph.classList.add("panel-hidden");
+      } else {
+        panelGraph.classList.remove("panel-hidden");
+        panelChat.classList.add("panel-hidden");
+        // Trigger vis-network resize when panel becomes visible
+        setTimeout(() => GraphViz.fitAll(), 50);
+      }
+    });
+  });
+}
 
 async function loadModels() {
   try {

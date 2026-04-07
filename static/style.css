@@ -412,10 +412,112 @@ main {
   background: var(--bg-surface);
 }
 
-/* ---- Mobile ---- */
+/* ---- Mobile tab bar (hidden on desktop) ---- */
+.mobile-tabs {
+  display: none;
+}
+
+/* ---- Responsive ---- */
 @media (max-width: 768px) {
-  main { flex-direction: column; }
-  .chat-panel { width: 100%; border-right: none; border-bottom: 1px solid var(--border); height: 60vh; }
-  .graph-panel { height: 40vh; }
+  header {
+    height: auto;
+    flex-direction: column;
+  }
+
+  .header-inner {
+    height: 52px;
+    padding: 0 16px;
+  }
+
   .logo-sub { display: none; }
+
+  .logo-text { font-size: 15px; }
+
+  #model-select { font-size: 12px; padding: 4px 8px; }
+
+  /* Tab bar */
+  .mobile-tabs {
+    display: flex;
+    border-top: 1px solid var(--border);
+    background: var(--bg-surface);
+  }
+
+  .mobile-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 0;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-family: var(--font);
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .mobile-tab svg { width: 15px; height: 15px; }
+
+  .mobile-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* Main layout: full-height panels, switched by tab */
+  main {
+    flex-direction: column;
+    /* header = 52px header-inner + ~42px tab bar = ~94px */
+    padding-top: 94px;
+  }
+
+  .chat-panel,
+  .graph-panel {
+    position: fixed;
+    top: 94px;
+    left: 0; right: 0; bottom: 0;
+    width: 100%;
+    height: auto;
+    border: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .chat-panel { z-index: 2; }
+  .graph-panel { z-index: 1; }
+
+  /* Hidden panel */
+  .panel-hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(20px);
+  }
+
+  /* Input area tweaks */
+  .chat-input-area { padding: 10px 12px 12px; }
+
+  #question-input { font-size: 16px; /* prevent iOS zoom */ }
+
+  .disclaimer { display: none; }
+
+  /* Example question buttons — horizontal scroll */
+  .example-questions {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .example-btn { white-space: nowrap; flex-shrink: 0; }
+
+  .welcome-message h2 { font-size: 18px; }
+
+  /* Graph legend — horizontal scroll on mobile */
+  .graph-legend {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }

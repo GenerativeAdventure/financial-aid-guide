@@ -25,11 +25,22 @@
       </select>
     </div>
   </div>
+  <!-- Mobile tab bar -->
+  <div class="mobile-tabs" role="tablist">
+    <button class="mobile-tab active" data-panel="chat" role="tab" aria-selected="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      Chat
+    </button>
+    <button class="mobile-tab" data-panel="graph" role="tab" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+      Graph
+    </button>
+  </div>
 </header>
 
 <main>
   <!-- Left: Chat panel -->
-  <section class="chat-panel">
+  <section class="chat-panel" id="panel-chat">
     <div class="chat-messages" id="chat-messages">
       <div class="welcome-message">
         <h2>Ask anything about US financial aid</h2>
@@ -65,7 +76,7 @@
   </section>
 
   <!-- Right: Graph panel -->
-  <section class="graph-panel">
+  <section class="graph-panel" id="panel-graph">
     <div class="graph-toolbar">
       <span class="graph-title">Knowledge Graph</span>
       <div class="graph-controls">
