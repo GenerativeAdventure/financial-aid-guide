@@ -10,6 +10,7 @@ from pydantic import BaseModel
 from openai import OpenAI
 
 from app.graph_engine import query_graph, all_communities, NODES, LINKS
+from app.text_search import search_chunks
 
 app = FastAPI(title="US Financial Aid Guide")
 
@@ -99,10 +100,13 @@ def query(req: QueryRequest):
     if not OPENAI_API_KEY:
         raise HTTPException(status_code=500, detail="OPENAI_API_KEY not configured")
 
-    # 1. Retrieve relevant subgraph
-    result = query_graph(req.question)
-    subgraph = result["subgraph"]
-    context  = result["context"]
+    # 1. Retrieve relevant subgraph + handbook text passages
+    result       = query_graph(req.question)
+    subgraph     = result["subgraph"]
+    graph_ctx    = result["context"]
+    text_ctx     = search_chunks(req.question, top_k=5)
+
+    context = f"{text_ctx}\n\n{graph_ctx}" if text_ctx else graph_ctx
 
     # 2. Build message list for OpenAI
     messages = [{"role": "system", "content": SYSTEM_PROMPT}]
@@ -112,7 +116,7 @@ def query(req: QueryRequest):
         if turn.get("role") in ("user", "assistant") and turn.get("content"):
             messages.append({"role": turn["role"], "content": turn["content"]})
 
-    # Inject graph context into the current user message
+    # Inject graph + text context into the current user message
     user_message = f"{context}\n\n---\n\nQuestion: {req.question}"
     messages.append({"role": "user", "content": user_message})
 
@@ -121,7 +125,7 @@ def query(req: QueryRequest):
     response = client.chat.completions.create(
         model=req.model,
         messages=messages,
-        max_completion_tokens=600,
+        max_completion_tokens=800,
         temperature=0.3,
     )
 

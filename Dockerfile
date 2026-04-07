@@ -10,6 +10,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app/ ./app/
 COPY static/ ./static/
 COPY graphify-out/graph.json ./graphify-out/graph.json
+COPY graphify-out/chunks.json ./graphify-out/chunks.json
 
 EXPOSE 8000
 
