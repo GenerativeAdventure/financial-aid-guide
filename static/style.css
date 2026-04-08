@@ -438,31 +438,88 @@ main {
 }
 
 /* ---- Mobile tab bar (hidden on desktop) ---- */
-.mobile-tabs {
-  display: none;
-}
+.mobile-tabs { display: none; }
 
-/* ---- Responsive ---- */
+/* ====================================================================
+   MOBILE — complete rewrite for clean, fixed-height header
+   Header = 48px top bar + 44px tab bar = 92px total, always.
+   ==================================================================== */
 @media (max-width: 768px) {
+
+  /* --- Header: strict 48px top bar --- */
   header {
-    height: auto;
+    height: 92px; /* 48 + 44 */
     flex-direction: column;
+    overflow: hidden;
   }
 
   .header-inner {
-    height: 52px;
-    padding: 0 16px;
+    height: 48px;
+    min-height: 48px;
+    flex-shrink: 0;
+    padding: 0 14px;
+    overflow: hidden;
+  }
+
+  /* Logo: clamp to single line, never wraps */
+  .logo {
+    min-width: 0;
+    overflow: hidden;
+    gap: 6px;
+    flex: 1;
+  }
+
+  .logo-icon { font-size: 18px; flex-shrink: 0; }
+
+  .logo-text {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .logo-sub { display: none; }
 
-  .logo-text { font-size: 15px; }
+  /* Right controls: icon-only "How it works" + compact select */
+  .header-right { gap: 10px; flex-shrink: 0; }
 
-  #model-select { font-size: 12px; padding: 4px 8px; }
+  .how-it-works-btn {
+    font-size: 0;          /* hide text */
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--text-muted);
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
 
-  /* Tab bar */
+  /* Show ℹ icon via pseudo-element */
+  .how-it-works-btn::before {
+    content: "ℹ";
+    font-size: 18px;
+    color: var(--text-muted);
+  }
+
+  .how-it-works-btn:hover { background: var(--bg-raised); }
+
+  .model-selector label { display: none; }
+
+  #model-select {
+    font-size: 12px;
+    padding: 5px 8px;
+    max-width: 120px;
+  }
+
+  /* --- Tab bar: strict 44px --- */
   .mobile-tabs {
     display: flex;
+    height: 44px;
+    min-height: 44px;
+    flex-shrink: 0;
     border-top: 1px solid var(--border);
     background: var(--bg-surface);
   }
@@ -473,78 +530,110 @@ main {
     align-items: center;
     justify-content: center;
     gap: 6px;
-    padding: 9px 0;
+    height: 44px;
     background: none;
     border: none;
+    border-bottom: 2px solid transparent;
     color: var(--text-muted);
     font-size: 13px;
     font-family: var(--font);
     font-weight: 500;
     cursor: pointer;
-    border-bottom: 2px solid transparent;
     transition: color 0.15s, border-color 0.15s;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .mobile-tab svg { width: 15px; height: 15px; }
+  .mobile-tab svg { width: 15px; height: 15px; flex-shrink: 0; }
 
   .mobile-tab.active {
     color: var(--accent);
     border-bottom-color: var(--accent);
   }
 
-  /* Main layout: full-height panels, switched by tab */
+  /* --- Main: panels fill exactly below the 92px header --- */
   main {
     flex-direction: column;
-    /* header = 52px header-inner + ~42px tab bar = ~94px */
-    padding-top: 94px;
+    padding-top: 0; /* panels are fixed, main doesn't need padding */
   }
 
   .chat-panel,
   .graph-panel {
     position: fixed;
-    top: 94px;
+    top: 92px;
     left: 0; right: 0; bottom: 0;
     width: 100%;
     height: auto;
     border: none;
-    transition: opacity 0.2s, transform 0.2s;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    will-change: opacity, transform;
   }
 
   .chat-panel { z-index: 2; }
   .graph-panel { z-index: 1; }
 
-  /* Hidden panel */
   .panel-hidden {
     opacity: 0;
     pointer-events: none;
-    transform: translateX(20px);
+    transform: translateX(16px);
   }
 
-  /* Input area tweaks */
-  .chat-input-area { padding: 10px 12px 12px; }
+  /* --- Chat panel internals --- */
+  .chat-messages {
+    /* bottom: input area ~80px */
+    padding: 16px 14px;
+    padding-bottom: 90px;
+  }
 
-  #question-input { font-size: 16px; /* prevent iOS zoom */ }
+  .chat-input-area {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    padding: 10px 12px 20px; /* 20px for iOS home bar */
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border);
+    z-index: 10;
+  }
 
+  #question-input { font-size: 16px; } /* prevent iOS zoom */
+
+  .input-meta { margin-top: 6px; }
   .disclaimer { display: none; }
 
-  /* Example question buttons — horizontal scroll */
+  /* --- Welcome screen --- */
+  .welcome-message h2 { font-size: 17px; }
+  .welcome-message p  { font-size: 13px; }
+
   .example-questions {
     flex-wrap: nowrap;
     overflow-x: auto;
     padding-bottom: 4px;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
-
+  .example-questions::-webkit-scrollbar { display: none; }
   .example-btn { white-space: nowrap; flex-shrink: 0; }
 
-  .welcome-message h2 { font-size: 18px; }
+  /* --- Bubbles --- */
+  .bubble { font-size: 14px; max-width: 100%; }
 
-  /* Graph legend — horizontal scroll on mobile */
+  /* --- Graph legend: horizontal scroll --- */
   .graph-legend {
     flex-wrap: nowrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
+  .graph-legend::-webkit-scrollbar { display: none; }
+
+  /* --- Modal: slide up as bottom sheet --- */
+  .hiw-backdrop { padding: 0; align-items: flex-end; }
+  .hiw-modal    { border-radius: 14px 14px 0 0; max-height: 90vh; }
+  .hiw-header   { padding: 18px 18px 14px; }
+  .hiw-body     { padding: 16px 18px 32px; gap: 22px; }
+  .hiw-title    { font-size: 17px; }
+  .hiw-step-split { flex-direction: column; }
+  .hiw-plus     { display: none; }
+  .hiw-cards    { flex-direction: column; }
+  .hiw-pill     { min-width: 110px; }
 }
 
 /* ============================================================
@@ -833,15 +922,4 @@ main {
   flex-shrink: 0;
 }
 
-/* ---- Mobile modal ---- */
-@media (max-width: 768px) {
-  .hiw-backdrop { padding: 0; align-items: flex-end; }
-  .hiw-modal { max-height: 92vh; border-radius: 14px 14px 0 0; }
-  .hiw-header { padding: 20px 20px 16px; }
-  .hiw-body { padding: 20px 20px 28px; gap: 24px; }
-  .hiw-step-split { flex-direction: column; }
-  .hiw-plus { display: none; }
-  .hiw-title { font-size: 17px; }
-  .hiw-cards { flex-direction: column; }
-  .how-it-works-btn { font-size: 12px; padding: 4px 10px; }
-}
+/* (mobile modal styles merged into main @media block above) */

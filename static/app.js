@@ -39,12 +39,15 @@ function bindMobileTabs() {
       tab.setAttribute("aria-selected", "true");
 
       const target = tab.dataset.panel;
+      const inputArea = document.querySelector(".chat-input-area");
       if (target === "chat") {
         panelChat.classList.remove("panel-hidden");
         panelGraph.classList.add("panel-hidden");
+        if (inputArea) inputArea.style.display = "";
       } else {
         panelGraph.classList.remove("panel-hidden");
         panelChat.classList.add("panel-hidden");
+        if (inputArea) inputArea.style.display = "none";
         // Trigger vis-network resize when panel becomes visible
         setTimeout(() => GraphViz.fitAll(), 50);
       }
